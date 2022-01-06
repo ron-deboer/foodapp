@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #333333;
+    background: #f6f9fc;
+    /* overflow: hidden; */
+}
+.bd-none {
+    border-top: 1px solid #ccc;
+}
+.btn {
+    background: darkorange;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+}
+.logo {
+    font-size: 1.5em;
+}
+.no-margin {
+    margin: 0;
+}
+.inline {
+    display: inline-flex;
+}
+.grid-container {
+    width: 75vw;
+    padding: 1em;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 1em;
+}
+.grid-cell {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 15px;
+    background: #f5e2e4;
+    color: #000;
+}
+.flex-container {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.row {
+    width: auto;
+}
+
+/*
+ * SNACKBAR
+ */
+#snackbar {
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 5px;
+}
+#snackbar.show {
+    background-color: navy;
+    display: block;
+}
+#snackbar.show-success {
+    background-color: green;
+    display: block;
+}
+#snackbar.show-error {
+    background-color: tomato;
+    display: block;
+}
+#snackbar.hide {
+    display: none;
+}
+
+/*
+ * DATATABLE
+ */
+.table-container {
+    font-size: 0.8em;
+}
+.table {
+    margin-bottom: 20px;
+}
+.table tr {
+    border-bottom: 1px solid #ddd;
+}
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.table tr:hover {
+    cursor: pointer;
+    background: #ffe;
+}
+.table tr td {
+    padding: 3px;
+    border-right: 1px solid #ddd;
+}
+.table tr td:nth-child(1) {
+    border-left: 1px solid #ddd;
+}
+.table tbody {
+    max-height: 50vh;
+    overflow: auto;
+}
+.pagination {
+    font-weight: 500;
+    color: maroon;
+}
+.pagination > .pagenav {
+    cursor: pointer;
+    font-size: 1em;
+}
+/*
+ * COLORS
+ */
+.bg-header {
+    background: #000957;
+}
+.bg-blue {
+    background: blue;
+}
+.bg-teal {
+    background: #c89595;
+}
+.bg-red {
+    background: #ff6d6d;
+}
+.bg-white {
+    background: white;
+}
+.bg-success {
+    background: darkgreen;
+    color: white;
+}
+.bg-warning {
+    background: darkorange;
+}
+/*
+ * FORMFIELD
+ */
+.form-field {
+    color: #444;
+    opacity: 0.75;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+.form-field > input {
+    margin: 0;
+}
+.form-field > .label {
+    color: navy;
+}
+.form-field > .error-msg {
+    color: crimson;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
