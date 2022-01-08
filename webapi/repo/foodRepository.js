@@ -5,6 +5,7 @@ const helper = require('../services/helper');
 
 class FoodRepository {
     constructor() {
+        this.foods = [];
         this.db = require('../db/mariadb');
     }
 
@@ -12,30 +13,61 @@ class FoodRepository {
         return this.foods.get(id);
     }
 
-    async getAll() {
-        const rows = await this.db.query('SELECT * FROM food');
-        const data = helper.emptyOrRows(rows);
-        const meta = { page: 1 };
-        return {
-            data,
-            meta
-        }
+    getAll() {
+        let sql = `SELECT * FROM food`;
+        return this.query(sql).then(data => {
+            return { data: data, meta: { page: 1 } };
+        });
     }
 
-    remove() {
+    remove(id) {
         const keys = Array.from(this.foods.keys());
-        this.foods.delete(keys[keys.length - 1]);
+        this.foods = this.foods.filter(x => x.id !== id);
+        let sql = `DELETE FROM food WHERE id=${id}`;
+        return this.query(sql).then(data => {
+            return { data: data, meta: { id: id } };
+        });
     }
 
-    save(food) {
-        if (this.getById(food.id) !== undefined) {
-            this.foods.set(food.id, food);
-            return 'Updated food with id=' + food.id;
+    save(id, item) {
+        if (id >= 0) {
+            return this.update(id, item)
         } else {
-            food.id = food.id || this.nextId++;
-            this.foods.set(food.id, food);
-            return 'Added food with id=' + food.id;
+            return this.insert(item)
         }
+    }
+
+    update(id, item) {
+        let arr1 = [];
+        Object.keys(item).forEach((key) => {
+            arr1.push(`${key}='${item[key]}'`);
+        });
+        const strKeyVals = arr1.join(', ');
+        let sql = `UPDATE food SET ${strKeyVals} WHERE id=${id}`;
+        return this.query(sql);
+    }
+
+    insert(item) {
+        let keys = [];
+        let vals = [];
+        Object.keys(item).forEach((key) => {
+            keys.push(`${key}`);
+            vals.push(`'${item[key]}'`);
+        });
+        const strKeys = keys.join(', ');
+        const strVals = vals.join(', ');
+        let sql = `INSERT INTO food (${strKeys}) VALUES (${strVals})`;
+        return this.query(sql);
+    }
+
+    query(sql, params) {
+        // console.log(sql);
+        return this.db.query(sql, params)
+            .then(
+                (resp) => {
+                    return resp;
+                }).catch(
+                (err) => setImmediate(() => { throw err; }));
     }
 }
 

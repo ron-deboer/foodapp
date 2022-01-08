@@ -7,15 +7,14 @@ export default function FoodDataTable(props) {
     const initialConfig = {
         rowsperpage: 20,
         pagenum: 1,
-        pagedata: [],
         filter: '',
-        filterdata: [],
     };
+    const [data, setData] = useState(props.data);
     const [config, setConfig] = useState(initialConfig);
     const [filter, setFilter] = useState('');
 
     useEffect(() => {
-        loadPageData(config);
+        setData(props.data);
     }, [props]);
 
     const pageNav = (direction) => {
@@ -25,22 +24,21 @@ export default function FoodDataTable(props) {
         } else if (direction === 'prev') {
             cfg.pagenum--;
         }
-        loadPageData(cfg);
+        loadPageData();
     };
 
     const rowsPerPage = (lines) => {
         let cfg = { ...config, rowsperpage: lines };
-        loadPageData(cfg);
+        loadPageData();
     };
 
-    const loadPageData = (cfg) => {
-        let newcfg = _.assign({}, cfg);
+    const loadPageData = () => {
+        let newcfg = _.assign({}, config);
         const pgstart = (newcfg.pagenum - 1) * newcfg.rowsperpage;
         const pgend = pgstart + newcfg.rowsperpage;
         if (filter === '') {
-            cfg.filterdata = props.data;
+            setData(props.data.slice(pgstart, pgend));
         }
-        newcfg.pagedata = cfg.filterdata.slice(pgstart, pgend);
         setConfig(newcfg);
     };
 
@@ -53,17 +51,17 @@ export default function FoodDataTable(props) {
         });
         let cfg = Object.assign({}, config);
         cfg.pagenum = 1;
-        cfg.filterdata = filtered;
+        setData(filtered);
         setConfig(cfg);
-        loadPageData(cfg);
+        loadPageData();
     };
 
     const editRow = (food) => {
         navigate('/addfood/' + food.id);
     };
 
-    const deleteRow = (food) => {
-        navigate('/addfood/' + food.id);
+    const removeRow = (food) => {
+        navigate('/removefood/' + food.id);
     };
 
     return (
@@ -105,7 +103,7 @@ export default function FoodDataTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {config.pagedata.map((item, index) => (
+                    {data.map((item, index) => (
                         <tr key={index}>
                             <td>{item.category}</td>
                             <td>{item.name}</td>
@@ -122,7 +120,7 @@ export default function FoodDataTable(props) {
                             <td style={{ textAlign: 'center' }}>
                                 <div
                                     className="tag bg-warning text-white is-small"
-                                    onClick={() => deleteRow(item)}
+                                    onClick={() => removeRow(item)}
                                 >
                                     X
                                 </div>

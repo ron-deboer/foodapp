@@ -8,6 +8,7 @@ import Home from './pages/home';
 import AddFood from './pages/addfood';
 
 import AppState from './context/AppState';
+import Removefood from './pages/removefood';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/foodlist" element={<Foodlist />} />
                 <Route path="/addfood/:pid" element={<AddFood />} />
+                <Route path="/removefood/:pid" element={<Removefood />} />
                 <Route path="/*" element={<Error404 />} />
             </Routes>
         </AppState>

@@ -18,7 +18,6 @@ const initialValue = {
 
 export default function Addfood(props) {
     const { pid } = useParams();
-    const { fetchFoods, getFood, addFood, updateFood } = FoodStore;
     const [food, setFood] = useState(initialValue);
     let navigate = useNavigate();
 
@@ -37,9 +36,7 @@ export default function Addfood(props) {
 
     useBeforeFirstRender(() => {
         if (pid !== '0') {
-            fetchFoods().then((data) => {
-                setFood(getFood(parseInt(pid)));
-            });
+            setFood(FoodStore.getFood(parseInt(pid)));
         }
     });
 
@@ -64,11 +61,11 @@ export default function Addfood(props) {
             data.calories = parseInt(data.calories);
             data.carbs = parseFloat(data.carbs);
             if (pid === '0') {
-                addFood(data);
+                FoodStore.addFood(data);
                 PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'success', text: 'Add food Success' });
             } else {
-                data.id = pid;
-                updateFood(data);
+                data.id = parseInt(pid);
+                FoodStore.updateFood(data);
                 PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'success', text: 'Update food Success' });
             }
             navigate('/foodlist');

@@ -45,6 +45,7 @@ export default function FormField(props) {
                         }}
                         onChange={(ev) => setValue(ev.target.value)}
                         style={{ margin: 0 }}
+                        readOnly={props.readonly || false}
                     />
                 );
             case 'select':
@@ -65,6 +66,7 @@ export default function FormField(props) {
                             setValue(ev.target.value);
                         }}
                         style={{ margin: 0 }}
+                        readOnly={props.readonly || false}
                     >
                         {props.options.map((option, idx) => (
                             <option key={idx} value={option}>

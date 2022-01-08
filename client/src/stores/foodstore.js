@@ -12,20 +12,16 @@ const FoodStore = (function () {
      */
     class FoodStore {
         constructor() {
-            this.fetchFoods();
+            // this.fetchFoods();
         }
 
         fetchFoods = () => {
             return FoodRepository.fetchAllFoods().then((data) => {
-                foods = data;
-                PubSub.emit(PubSub.topic.STORE_UPDATED, {});
+                foods = Object.assign([], data);
+                this.notify();
                 return foods;
             });
         };
-
-        getFood(id) {
-            return foods.find((x) => x.id === id);
-        }
 
         getFoods() {
             return foods.sort((i1, i2) => {
@@ -33,19 +29,34 @@ const FoodStore = (function () {
             });
         }
 
+        getFood(id) {
+            return foods.find((x) => x.id === id);
+        }
+
         addFood = (food) => {
             foods.push(food);
             FoodRepository.insertFood(food).then(() => {
-                PubSub.emit(PubSub.topic.STORE_UPDATED, {});
+                this.fetchFoods();
             });
         };
 
         updateFood = (food) => {
             const idx = foods.findIndex((x) => x.id === food.id);
             foods[idx] = Object.assign({}, food);
-            FoodRepository.updateFood(food).then(() => {
-                PubSub.emit(PubSub.topic.STORE_UPDATED, {});
+            FoodRepository.updateFood(food).then((resp) => {
+                this.fetchFoods();
             });
+        };
+
+        removeFood = (id) => {
+            foods = foods.filter((x) => x.id !== id);
+            FoodRepository.removeFood(id).then(() => {
+                this.fetchFoods();
+            });
+        };
+
+        notify = () => {
+            PubSub.emit(PubSub.topic.STORE_UPDATED, {});
         };
     }
     return FoodStore;
