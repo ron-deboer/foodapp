@@ -6,21 +6,33 @@ const FoodStore = (function () {
      * private members
      */
     let foods = [];
+    let errorTemplate = {
+        id: 0,
+        name: 'ERROR - FETCH FROM SERVER FAILED',
+        category: '',
+        calories: 0,
+        carbs: 0,
+    };
 
     /*
      * public members
      */
     class FoodStore {
-        constructor() {
-            // this.fetchFoods();
-        }
+        constructor() {}
 
         fetchFoods = () => {
-            return FoodRepository.fetchAllFoods().then((data) => {
-                foods = Object.assign([], data);
-                this.notify();
-                return foods;
-            });
+            return FoodRepository.fetchAllFoods().then(
+                (data) => {
+                    foods = Object.assign([], data);
+                    this.notify();
+                    return foods;
+                },
+                (err) => {
+                    foods = [errorTemplate];
+                    this.notify();
+                    return foods;
+                }
+            );
         };
 
         getFoods() {

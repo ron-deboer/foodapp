@@ -12,6 +12,7 @@ require('./config/cors')(app);
 require('./routes/personRoutes')(app);
 require('./routes/versionRoutes')(app, config);
 require('./routes/foodRoutes')(app, config);
+require('./routes/authRoutes')(app, config);
 
 
 app.listen(3030, () => {

@@ -23,14 +23,21 @@ function Foodlist(props) {
     if (!foods) {
         return (
             <div className="is-full-screen text-center">
-                <h1 className="">FOOD CALORIE LIST</h1>
+                <h1>FOOD CALORIE LIST</h1>
                 <img src="./loading.gif" alt="loading..." className="centered" />;
+            </div>
+        );
+    } else if (foods[0].name.indexOf('ERROR') > -1) {
+        return (
+            <div className="is-full-screen text-center">
+                <h1>FOOD CALORIE LIST</h1>
+                <h2 className="bg-error text-white">ERROR - DATA FETCH FAILED</h2>;
             </div>
         );
     } else {
         return (
             <div className="is-full-screen text-center">
-                <h1 className="">FOOD CALORIE LIST</h1>
+                <h1>FOOD CALORIE LIST</h1>
                 <FoodDataTable data={foods} />
                 <p>
                     <button className="button btn" onClick={() => FoodStore.fetchFoods()}>

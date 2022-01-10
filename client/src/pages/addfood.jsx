@@ -9,11 +9,11 @@ import FoodStore from '../stores/foodstore';
 import FormField from '../components/FormField';
 
 const initialValue = {
-    id: '',
+    id: 0,
     category: '',
     name: '',
-    calories: '',
-    carbs: '',
+    calories: 0,
+    carbs: 0,
 };
 
 export default function Addfood(props) {
@@ -35,7 +35,7 @@ export default function Addfood(props) {
     ];
 
     useBeforeFirstRender(() => {
-        if (pid !== '0') {
+        if (pid > -1) {
             setFood(FoodStore.getFood(parseInt(pid)));
         }
     });

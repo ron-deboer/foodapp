@@ -6,6 +6,7 @@ import { USER_AUTH } from './AppActions';
 function AppState({ children }) {
     const initialState = {
         username: 'deboer',
+        email: 'deboer',
         isAuth: false,
     };
 

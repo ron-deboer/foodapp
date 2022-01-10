@@ -1,11 +1,18 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header(props) {
-    const { state } = useContext(AppContext);
-
+    const { state, setUserAuth } = useContext(AppContext);
     let navMenu = null;
+    let navigate = useNavigate();
+
+    const signOut = () => {
+        setUserAuth(false);
+        navigate('/');
+    };
+
     if (state.isAuth) {
         navMenu = (
             <div className="nav-right">
@@ -15,9 +22,9 @@ export default function Header(props) {
                 <Link to="/foodlist" className="text-white">
                     Food List
                 </Link>
-                <Link to="/signup" className="text-white">
-                    Sign Up
-                </Link>
+                <a onClick={signOut} className="text-white" style={{ cursor: 'pointer' }}>
+                    Sign Out
+                </a>
             </div>
         );
     }

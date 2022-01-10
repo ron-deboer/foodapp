@@ -2,8 +2,7 @@ import { useState, useContext } from 'react';
 import AppContext from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 
-import { auth, signInWithEmailAndPassword, registerWithEmailAndPassword } from '../firebase-api';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import AuthApi from '../services/authapi';
 
 import PubSub from '../services/pubsub';
 
@@ -11,29 +10,40 @@ function Home(props) {
     const { state, setUserAuth } = useContext(AppContext);
     const [signup, setSignUp] = useState(false);
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('user1@email.com');
+    const [password, setPassword] = useState('Close2Home');
 
     let navigate = useNavigate();
 
     const signIn = () => {
-        signInWithEmailAndPassword(email, password).then((resp) => {
-            if (!resp) {
+        const auth = {
+            email: email,
+            password: password,
+        };
+        AuthApi.signInWithEmailAndPassword(auth).then((resp) => {
+            if (!resp.status) {
                 PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'error', text: 'Log In Failed' });
                 return;
             }
+            setUserAuth(true);
+            PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'success', text: 'Sign in Success' });
+            setTimeout(() => {
+                setEmail('');
+                setPassword('');
+                navigate('/foodlist');
+            }, 1000);
         });
-        setUserAuth(true);
-        PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'success', text: 'Sign in Success' });
-        setTimeout(() => {
-            setEmail('');
-            setPassword('');
-            navigate('/foodlist');
-        }, 1000);
+    };
+
+    const showSignup = () => {
+        setEmail('');
+        setPassword('');
+        setName('');
+        setSignUp(true);
     };
 
     const signUp = () => {
-        registerWithEmailAndPassword(name, email, password).then((resp) => {
+        AuthApi.registerWithEmailAndPassword(email, password, name).then((resp) => {
             if (!resp) {
                 PubSub.emit(PubSub.topic.SHOW_SNACKBAR, { type: 'error', text: 'Sign Up Failed' });
                 return;
@@ -69,13 +79,7 @@ function Home(props) {
                 </div>
                 <p style={{ marginTop: 10, fontSize: 12, textTransform: 'uppercase' }}>
                     Don't have an account ? &nbsp;
-                    <a
-                        href="/#"
-                        className=""
-                        onClick={() => {
-                            setSignUp(true);
-                        }}
-                    >
+                    <a href="/#" className="" onClick={showSignup}>
                         Sign Up
                     </a>
                 </p>

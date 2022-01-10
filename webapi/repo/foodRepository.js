@@ -20,15 +20,6 @@ class FoodRepository {
         });
     }
 
-    remove(id) {
-        const keys = Array.from(this.foods.keys());
-        this.foods = this.foods.filter(x => x.id !== id);
-        let sql = `DELETE FROM food WHERE id=${id}`;
-        return this.query(sql).then(data => {
-            return { data: data, meta: { id: id } };
-        });
-    }
-
     save(id, item) {
         if (id >= 0) {
             return this.update(id, item)
@@ -58,6 +49,15 @@ class FoodRepository {
         const strVals = vals.join(', ');
         let sql = `INSERT INTO food (${strKeys}) VALUES (${strVals})`;
         return this.query(sql);
+    }
+
+    remove(id) {
+        const keys = Array.from(this.foods.keys());
+        this.foods = this.foods.filter(x => x.id !== id);
+        let sql = `DELETE FROM food WHERE id=${id}`;
+        return this.query(sql).then(data => {
+            return { data: data, meta: { id: id } };
+        });
     }
 
     query(sql, params) {

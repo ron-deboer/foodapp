@@ -2,7 +2,6 @@ const FoodRepository = (function () {
     /*
      * private members
      */
-    const COLLECTION_NAME = 'Food';
     const urls = {
         Host: 'http://127.0.0.1:3030/',
         ListFoods: 'food/all',
@@ -25,14 +24,19 @@ const FoodRepository = (function () {
                 };
             }
             const url = `${urls.Host}${urls.ListFoods}`;
-            return fetch(url).then(async (response) => {
-                const resp = await response.json();
-                const foods = resp.data.map((item) => {
-                    const row = transform(item, item.id);
-                    return row;
+            return fetch(url)
+                .then(async (response) => {
+                    const resp = await response.json();
+                    const foods = resp.data.map((item) => {
+                        const row = transform(item, item.id);
+                        return row;
+                    });
+                    return foods;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    throw err;
                 });
-                return foods;
-            });
         }
 
         insertFood(item) {

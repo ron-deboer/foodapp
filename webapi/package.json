@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mysql": "^2.18.1",
